@@ -45,9 +45,18 @@ function sibala(input) {
     getCategory(player1) === "ALL_THE_SAME_KIND" &&
     getCategory(player2) !== "ALL_THE_SAME_KIND"
   ) {
-    return "Amy wins, all the same kind: 6"
+    const winnerOutput = player1.dices[0]
+    const winnerName = player1.name
+    return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
   }
-
+  if (
+    getCategory(player1) !== "ALL_THE_SAME_KIND" &&
+    getCategory(player2) === "ALL_THE_SAME_KIND"
+  ) {
+    const winnerOutput = player2.dices[0]
+    const winnerName = player2.name
+    return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
+  }
   if (
     getCategory(player1) === "NORMAL_POINT" &&
     getCategory(player2) === "NO_POINT"
@@ -125,6 +134,10 @@ describe("DicesGame", () => {
       const input = "Amy:6 6 6 6  Lin:1 2 3 4"
       expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
     })
+    it("NO_POINT vs. ALL_THE_SAME_KIND", () => {
+      const input = "Amy:1 2 3 4  Lin:5 5 5 5"
+      expect(sibala(input)).to.equal("Lin wins, all the same kind: 5")
+    })
     it("NORMAL_POINT vs. NO_POINT", () => {
       const input = "Amy:6 6 3 4  Lin:1 2 3 4"
       expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
@@ -139,6 +152,10 @@ describe("DicesGame", () => {
     it("ALL_THE_SAME_KIND vs. ALL_THE_SAME_KIND - Lin wins", () => {
       const input = "Amy:1 1 1 1  Lin:6 6 6 6"
       expect(sibala(input)).to.equal("Lin wins, all the same kind: 6")
+    })
+    it("ALL_THE_SAME_KIND vs. ALL_THE_SAME_KIND - Tei", () => {
+      const input = "Amy:1 1 1 1  Lin:1 1 1 1"
+      expect(sibala(input)).to.equal("Tie")
     })
   })
 })
