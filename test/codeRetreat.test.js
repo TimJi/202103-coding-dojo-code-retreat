@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { countBy } from "lodash"
+import { countBy, invertBy } from "lodash"
 
 function getPlayers(input) {
   const player1 = input.split("  ")[0]
@@ -28,14 +28,15 @@ function getPlayers(input) {
 }
 
 function getCategory(player) {
-  const _map = countBy(player.dices)
+  const _map = invertBy(countBy(player.dices))
 
-  if (Object.keys(_map).length === 1) {
+  if (_map[4]) {
     return "ALL_THE_SAME_KIND"
   }
-  if (Object.keys(_map).length === 4) {
+  if ((_map[1] && _map[1].length === 4) || _map[3]) {
     return "NO_POINT"
   }
+  return "NORMAL_POINT"
 }
 
 describe("DicesGame", () => {
@@ -60,11 +61,20 @@ describe("DicesGame", () => {
     }
     expect(getCategory(input)).to.equal("NO_POINT")
   })
-  // it("should be no point when 3 of them are the same", () => {
-  //   let input = {
-  //     name: "Amy",
-  //     dices: [6, 6, 6, 3],
-  //   }
-  //   expect(getCategory(input)).to.equal("NO_POINT")
-  // })
+
+  it("should be normal point ", () => {
+    let input = {
+      name: "Amy",
+      dices: [6, 6, 5, 3],
+    }
+    expect(getCategory(input)).to.equal("NORMAL_POINT")
+  })
+
+  it("should be normal point ", () => {
+    let input = {
+      name: "Amy",
+      dices: [6, 6, 2, 2],
+    }
+    expect(getCategory(input)).to.equal("NORMAL_POINT")
+  })
 })
