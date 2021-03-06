@@ -25,6 +25,7 @@
     "test": "mocha --require babel-register"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "prettier": "^2.0.5"
   }
 }
