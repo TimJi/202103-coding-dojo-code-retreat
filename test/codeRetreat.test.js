@@ -1,6 +1,10 @@
 import { expect } from "chai"
 import { countBy, invertBy } from "lodash"
 
+const ALL_THE_SAME_KIND = "ALL_THE_SAME_KIND"
+const NO_POINT = "NO_POINT"
+const NORMAL_POINT = "NORMAL_POINT"
+
 function getPlayers(input) {
   const player1 = input.split("  ")[0]
   const player2 = input.split("  ")[1]
@@ -31,47 +35,40 @@ function getCategory(player) {
   const _map = invertBy(countBy(player.dices))
 
   if (_map[4]) {
-    return "ALL_THE_SAME_KIND"
+    return ALL_THE_SAME_KIND
   }
   if ((_map[1] && _map[1].length === 4) || _map[3]) {
-    return "NO_POINT"
+    return NO_POINT
   }
-  return "NORMAL_POINT"
+  return NORMAL_POINT
 }
 
 function sibala(input) {
   const [player1, player2] = getPlayers(input)
   let player1Category = getCategory(player1)
   let player2Category = getCategory(player2)
+
   if (player1Category !== player2Category) {
     if (
-      player1Category === "ALL_THE_SAME_KIND" &&
-      player2Category !== "ALL_THE_SAME_KIND"
+      player1Category === ALL_THE_SAME_KIND ||
+      player2Category === ALL_THE_SAME_KIND
     ) {
       const winnerOutput =
-        player1Category === "ALL_THE_SAME_KIND"
+        player1Category === ALL_THE_SAME_KIND
           ? player1.dices[0]
           : player2.dices[0]
       const winnerName =
-        player1Category === "ALL_THE_SAME_KIND" ? player1.name : player2.name
+        player1Category === ALL_THE_SAME_KIND ? player1.name : player2.name
       return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
-    }
-    if (
-      player1Category !== "ALL_THE_SAME_KIND" &&
-      player2Category === "ALL_THE_SAME_KIND"
-    ) {
-      const winnerOutput = player2.dices[0]
-      const winnerName = player2.name
-      return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
-    }
-  } else {
-    if (player1Category === "NORMAL_POINT" && player2Category === "NO_POINT") {
-      return "Amy wins, all the same kind: 6"
     }
 
+    if (player1Category === NORMAL_POINT && player2Category === NO_POINT) {
+      return "Amy wins, all the same kind: 6"
+    }
+  } else {
     if (
-      player1Category === "ALL_THE_SAME_KIND" &&
-      player2Category === "ALL_THE_SAME_KIND"
+      player1Category === ALL_THE_SAME_KIND &&
+      player2Category === ALL_THE_SAME_KIND
     ) {
       if (player1.dices[0] > player2.dices[0]) {
         return "Amy wins, all the same kind: 6"
@@ -97,21 +94,21 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 6, 6],
       }
-      expect(getCategory(input)).to.equal("ALL_THE_SAME_KIND")
+      expect(getCategory(input)).to.equal(ALL_THE_SAME_KIND)
     })
     it("should be no point", () => {
       let input = {
         name: "Amy",
         dices: [1, 2, 3, 4],
       }
-      expect(getCategory(input)).to.equal("NO_POINT")
+      expect(getCategory(input)).to.equal(NO_POINT)
     })
     it("should be no point", () => {
       let input = {
         name: "Amy",
         dices: [2, 2, 2, 3],
       }
-      expect(getCategory(input)).to.equal("NO_POINT")
+      expect(getCategory(input)).to.equal(NO_POINT)
     })
 
     it("should be normal point ", () => {
@@ -119,7 +116,7 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 5, 3],
       }
-      expect(getCategory(input)).to.equal("NORMAL_POINT")
+      expect(getCategory(input)).to.equal(NORMAL_POINT)
     })
 
     it("should be normal point ", () => {
@@ -127,7 +124,7 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 2, 2],
       }
-      expect(getCategory(input)).to.equal("NORMAL_POINT")
+      expect(getCategory(input)).to.equal(NORMAL_POINT)
     })
   })
 
@@ -146,7 +143,7 @@ describe("DicesGame", () => {
     })
     it("NORMAL_POINT vs. NO_POINT", () => {
       const input = "Amy:6 6 3 4  Lin:1 2 3 4"
-      expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+      expect(sibala(input)).to.equal("Amy wins, normal point: 7")
     })
   })
 
