@@ -48,6 +48,24 @@ function sibala(input) {
     return "Amy wins, all the same kind: 6"
   }
 
+  if (
+    getCategory(player1) === "NORMAL_POINT" &&
+    getCategory(player2) === "NO_POINT"
+  ) {
+    return "Amy wins, all the same kind: 6"
+  }
+
+  if (
+    getCategory(player1) === "ALL_THE_SAME_KIND" &&
+    getCategory(player2) === "ALL_THE_SAME_KIND"
+  ) {
+    if (player1.dices[0] > player2.dices[0]) {
+      return "Amy wins, all the same kind: 6"
+    } else {
+      return "Lin wins, all the same kind: 6"
+    }
+  }
+
   throw new Error("not implement")
 }
 
@@ -98,8 +116,29 @@ describe("DicesGame", () => {
     })
   })
 
-  it("ALL_THE_SAME_KIND vs. NORMAL_POINT", () => {
-    const input = "Amy:6 6 6 6  Lin:6 6 3 4"
-    expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+  describe("shibala compare diff category", () => {
+    it("ALL_THE_SAME_KIND vs. NORMAL_POINT", () => {
+      const input = "Amy:6 6 6 6  Lin:6 6 3 4"
+      expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+    })
+    it("ALL_THE_SAME_KIND vs. NO_POINT", () => {
+      const input = "Amy:6 6 6 6  Lin:1 2 3 4"
+      expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+    })
+    it("NORMAL_POINT vs. NO_POINT", () => {
+      const input = "Amy:6 6 3 4  Lin:1 2 3 4"
+      expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+    })
+  })
+
+  describe("shibala compare same category", () => {
+    it("ALL_THE_SAME_KIND vs. ALL_THE_SAME_KIND - Amy wins", () => {
+      const input = "Amy:6 6 6 6  Lin:1 1 1 1"
+      expect(sibala(input)).to.equal("Amy wins, all the same kind: 6")
+    })
+    it("ALL_THE_SAME_KIND vs. ALL_THE_SAME_KIND - Lin wins", () => {
+      const input = "Amy:1 1 1 1  Lin:6 6 6 6"
+      expect(sibala(input)).to.equal("Lin wins, all the same kind: 6")
+    })
   })
 })
