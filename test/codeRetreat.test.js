@@ -9,15 +9,9 @@ function getPlayers(input) {
   const player1 = input.split("  ")[0]
   const player2 = input.split("  ")[1]
   const player1Name = player1.split(":")[0]
-  const player1Dices = player1
-    .split(":")[1]
-    .split(" ")
-    .map(str => parseInt(str))
+  const player1Dices = player1.split(":")[1].split(" ").map(str => parseInt(str))
   const player2Name = player2.split(":")[0]
-  const player2Dices = player2
-    .split(":")[1]
-    .split(" ")
-    .map(str => parseInt(str))
+  const player2Dices = player2.split(":")[1].split(" ").map(str => parseInt(str))
 
   return [
     {
@@ -36,15 +30,24 @@ function getTypeAndPoint(player) {
 
   if (_map[4]) {
     const point = _map[4]
-    return { type: ALL_THE_SAME_KIND, point: point }
+    return {
+      type: ALL_THE_SAME_KIND,
+      point: point,
+    }
   }
   if ((_map[1] && _map[1].length === 4) || _map[3]) {
     return { type: NO_POINT }
   }
   if (_map[2].length === 2) {
-    return { type: NORMAL_POINT, point: Math.max(_map[2]) }
+    return {
+      type: NORMAL_POINT,
+      point: Math.max(_map[2]),
+    }
   }
-  return { type: NORMAL_POINT, point: _map[1][0] + _map[1][1] }
+  return {
+    type: NORMAL_POINT,
+    point: _map[1][0] + _map[1][1],
+  }
 }
 
 function sibala(input) {
@@ -58,11 +61,11 @@ function sibala(input) {
       player2Category === ALL_THE_SAME_KIND
     ) {
       const winnerOutput =
-        player1Category === ALL_THE_SAME_KIND
-          ? player1.dices[0]
-          : player2.dices[0]
+              player1Category === ALL_THE_SAME_KIND
+                ? player1.dices[0]
+                : player2.dices[0]
       const winnerName =
-        player1Category === ALL_THE_SAME_KIND ? player1.name : player2.name
+              player1Category === ALL_THE_SAME_KIND ? player1.name : player2.name
       return `${winnerName} wins, all the same kind: ${winnerOutput}`
     }
 
@@ -74,7 +77,8 @@ function sibala(input) {
       const winnerOutput = 7
       return `${player2.name} wins, normal point: ${winnerOutput}`
     }
-  } else {
+  }
+  else {
     if (
       player1Category === ALL_THE_SAME_KIND &&
       player2Category === ALL_THE_SAME_KIND
@@ -84,7 +88,8 @@ function sibala(input) {
       }
       if (player1.dices[0] > player2.dices[0]) {
         return "Amy wins, all the same kind: 6"
-      } else {
+      }
+      else {
         return "Lin wins, all the same kind: 6"
       }
     }
