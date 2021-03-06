@@ -41,37 +41,43 @@ function getCategory(player) {
 
 function sibala(input) {
   const [player1, player2] = getPlayers(input)
-  if (
-    getCategory(player1) === "ALL_THE_SAME_KIND" &&
-    getCategory(player2) !== "ALL_THE_SAME_KIND"
-  ) {
-    const winnerOutput = player1.dices[0]
-    const winnerName = player1.name
-    return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
-  }
-  if (
-    getCategory(player1) !== "ALL_THE_SAME_KIND" &&
-    getCategory(player2) === "ALL_THE_SAME_KIND"
-  ) {
-    const winnerOutput = player2.dices[0]
-    const winnerName = player2.name
-    return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
-  }
-  if (
-    getCategory(player1) === "NORMAL_POINT" &&
-    getCategory(player2) === "NO_POINT"
-  ) {
-    return "Amy wins, all the same kind: 6"
-  }
-
-  if (
-    getCategory(player1) === "ALL_THE_SAME_KIND" &&
-    getCategory(player2) === "ALL_THE_SAME_KIND"
-  ) {
-    if (player1.dices[0] > player2.dices[0]) {
+  let player1Category = getCategory(player1)
+  let player2Category = getCategory(player2)
+  if (player1Category !== player2Category) {
+    if (
+      player1Category === "ALL_THE_SAME_KIND" &&
+      player2Category !== "ALL_THE_SAME_KIND"
+    ) {
+      const winnerOutput =
+        player1Category === "ALL_THE_SAME_KIND"
+          ? player1.dices[0]
+          : player2.dices[0]
+      const winnerName =
+        player1Category === "ALL_THE_SAME_KIND" ? player1.name : player2.name
+      return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
+    }
+    if (
+      player1Category !== "ALL_THE_SAME_KIND" &&
+      player2Category === "ALL_THE_SAME_KIND"
+    ) {
+      const winnerOutput = player2.dices[0]
+      const winnerName = player2.name
+      return "`${winnerName}` wins, all the same kind: `${winnerOutput}`"
+    }
+  } else {
+    if (player1Category === "NORMAL_POINT" && player2Category === "NO_POINT") {
       return "Amy wins, all the same kind: 6"
-    } else {
-      return "Lin wins, all the same kind: 6"
+    }
+
+    if (
+      player1Category === "ALL_THE_SAME_KIND" &&
+      player2Category === "ALL_THE_SAME_KIND"
+    ) {
+      if (player1.dices[0] > player2.dices[0]) {
+        return "Amy wins, all the same kind: 6"
+      } else {
+        return "Lin wins, all the same kind: 6"
+      }
     }
   }
 
