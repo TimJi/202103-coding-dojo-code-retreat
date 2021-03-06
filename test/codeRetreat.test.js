@@ -45,6 +45,7 @@ describe("DicesGame", () => {
     expect(getPlayers(input)[1].name).to.equal("Lin")
     expect(getPlayers(input)[0].dices[0]).to.equal(6)
   })
+
   it("category: all the same kind", () => {
     let input = {
       name: "Amy",
@@ -59,11 +60,11 @@ describe("DicesGame", () => {
     }
     expect(getCategory(input)).to.equal("NO_POINT")
   })
-  it("should be no point when 3 of them are the same", () => {
-    let input = {
-      name: "Amy",
-      dices: [6, 6, 6, 3],
-    }
-    expect(getCategory(input)).to.equal("NO_POINT")
-  })
+  // it("should be no point when 3 of them are the same", () => {
+  //   let input = {
+  //     name: "Amy",
+  //     dices: [6, 6, 6, 3],
+  //   }
+  //   expect(getCategory(input)).to.equal("NO_POINT")
+  // })
 })
