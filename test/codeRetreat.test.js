@@ -25,35 +25,25 @@ function getPlayers(input) {
   ]
 }
 
-function getTypeAndPoint(player) {
+function getCategory(player) {
   const _map = invertBy(countBy(player.dices))
 
   if (_map[4]) {
-    const point = _map[4]
-    return {
-      type: ALL_THE_SAME_KIND,
-      point: point,
-    }
+    return ALL_THE_SAME_KIND
   }
   if ((_map[1] && _map[1].length === 4) || _map[3]) {
-    return { type: NO_POINT }
+    return NO_POINT
   }
   if (_map[2].length === 2) {
-    return {
-      type: NORMAL_POINT,
-      point: Math.max(_map[2]),
-    }
+    return NORMAL_POINT
   }
-  return {
-    type: NORMAL_POINT,
-    point: _map[1][0] + _map[1][1],
-  }
+  return NORMAL_POINT
 }
 
 function sibala(input) {
   const [player1, player2] = getPlayers(input)
-  let player1Category = getTypeAndPoint(player1).type
-  let player2Category = getTypeAndPoint(player2).type
+  let player1Category = getCategory(player1)
+  let player2Category = getCategory(player2)
 
   if (player1Category !== player2Category) {
     if (
@@ -111,21 +101,21 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 6, 6],
       }
-      expect(getTypeAndPoint(input).type).to.equal(ALL_THE_SAME_KIND)
+      expect(getCategory(input)).to.equal(ALL_THE_SAME_KIND)
     })
     it("should be no point", () => {
       let input = {
         name: "Amy",
         dices: [1, 2, 3, 4],
       }
-      expect(getTypeAndPoint(input).type).to.equal(NO_POINT)
+      expect(getCategory(input)).to.equal(NO_POINT)
     })
     it("should be no point", () => {
       let input = {
         name: "Amy",
         dices: [2, 2, 2, 3],
       }
-      expect(getTypeAndPoint(input).type).to.equal(NO_POINT)
+      expect(getCategory(input)).to.equal(NO_POINT)
     })
 
     it("should be normal point ", () => {
@@ -133,7 +123,7 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 5, 3],
       }
-      expect(getTypeAndPoint(input).type).to.equal(NORMAL_POINT)
+      expect(getCategory(input)).to.equal(NORMAL_POINT)
     })
 
     it("should be normal point ", () => {
@@ -141,7 +131,7 @@ describe("DicesGame", () => {
         name: "Amy",
         dices: [6, 6, 2, 2],
       }
-      expect(getTypeAndPoint(input).type).to.equal(NORMAL_POINT)
+      expect(getCategory(input)).to.equal(NORMAL_POINT)
     })
   })
 
