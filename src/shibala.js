@@ -11,13 +11,10 @@ export function shibala(input) {
   const result = startComparison(player1, player2)
 
   const { winner } = result
-  if (result.isTypeTie()) {
+  if (!result.hasWinner()) {
     return shibalaTieOutput()
   }
-  if (result.isTypeWinByWinnerDice()) {
-    return winnerOutputFormat(winner.name, winner.category, winner.maxDice)
-  }
-  return winnerOutputFormat(winner.name, winner.category, winner.point)
+  return winnerOutputFormat(winner.name, winner.category, result.winnerOuptput)
 }
 
 function shibalaTieOutput() {

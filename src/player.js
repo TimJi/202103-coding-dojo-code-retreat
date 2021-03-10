@@ -104,12 +104,14 @@ export function getPlayers(input) {
 class DiceRollCompareResult {
   /**
    *
-   * @param {Player} player1
-   * @param {Player} player2
+   * @param {string} type
+   * @param {Player} winner
+   * @param {string} winnerOutput
    */
-  constructor(type, winner) {
+  constructor(type, winner, winnerOutput) {
     this.type = type
     this.winner = winner
+    this.winnerOuptput = winnerOutput;
   }
 
   static get ResultTypeEnum() {
@@ -120,28 +122,16 @@ class DiceRollCompareResult {
     }
   }
 
-  isTypeTie() {
-    return this.type === DiceRollCompareResult.ResultTypeEnum.TIE
-  }
-
-  isTypeWin() {
-    return this.type === DiceRollCompareResult.ResultTypeEnum.WIN
-  }
-
-  isTypeWinByWinnerDice() {
-    return this.type === DiceRollCompareResult.ResultTypeEnum.WIN_BY_WINNER_DICE
-  }
-
   static ofTie() {
-    return new DiceRollCompareResult(DiceRollCompareResult.ResultTypeEnum.TIE)
+    return new DiceRollCompareResult();
   }
 
-  static ofWin(winner) {
-    return new DiceRollCompareResult(DiceRollCompareResult.ResultTypeEnum.WIN, winner)
+  static ofWin(winner, output) {
+    return new DiceRollCompareResult(DiceRollCompareResult.ResultTypeEnum.WIN, winner, output)
   }
 
-  static ofWinByWinnerDice(winner) {
-    return new DiceRollCompareResult(DiceRollCompareResult.ResultTypeEnum.WIN_BY_WINNER_DICE, winner)
+  hasWinner() {
+    return this.winner !== undefined;
   }
 }
 
@@ -155,7 +145,7 @@ export function startComparison(player1, player2) {
 
   if (player1.category !== player2.category) {
     const winner = compareCategory(player1.category, player2.category) > 0 ? player1 : player2
-    return DiceRollCompareResult.ofWin(winner)
+    return new DiceRollCompareResult(null, winner, winner.point)
   }
 
   if (player1.category === NO_POINT) {
@@ -166,7 +156,8 @@ export function startComparison(player1, player2) {
     if (player1.point === player2.point) {
       return DiceRollCompareResult.ofTie()
     }
-    return DiceRollCompareResult.ofWin(player1.point > player2.point ? player1 : player2)
+    const winner = player1.point > player2.point ? player1 : player2
+    return DiceRollCompareResult.ofWin(winner, winner.point)
   }
 
   if (player1.category === NORMAL_POINT) {
@@ -176,10 +167,10 @@ export function startComparison(player1, player2) {
       }
 
       const winner = player1.maxDice > player2.maxDice ? player1 : player2
-      return DiceRollCompareResult.ofWinByWinnerDice(winner)
+      return DiceRollCompareResult.ofWin(winner, winner.maxDice)
     }
 
-    return DiceRollCompareResult.ofWin(player1.point > player2.point ? player1 : player2)
+    const winner = player1.point > player2.point ? player1 : player2
+    return DiceRollCompareResult.ofWin(winner, winner.point)
   }
-
 }
